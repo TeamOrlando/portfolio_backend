@@ -1,3 +1,4 @@
+import { required } from "joi";
 import { model, Schema } from "mongoose";
 
 
@@ -18,13 +19,11 @@ const userSchema = new Schema({
     contact: { type: String },
     languages: [{ type: String }],
     resume: { type: String },
-  },
-
-  socials: {
     githublink: { type: String },
     linkedinlink: { type: String }
-
   },
+
+
   skills: [
     {
       name: { type: String },
@@ -34,7 +33,7 @@ const userSchema = new Schema({
   ],
   experience: [
     {
-      company: { type: String },
+      company: { type: String, required: true },
       location: { type: String },
       startDate: { type: String },
       endDate: { type: String },
