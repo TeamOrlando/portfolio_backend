@@ -1,8 +1,10 @@
 import { Router } from "express"
-import { userProfile } from "../controller/profile_controller.js"
+import { addProfile, getAllUserProfile, getOneProfile, } from "../controller/profile_controller.js"
 
 //defining router
 export const profileRouter = Router();
 
-profileRouter.post('/users/profile', userProfile)
+profileRouter.post('/users/profile', addProfile)
+profileRouter.get('/users/profile/:id', getOneProfile)
+profileRouter.get('/users/profile', getAllUserProfile)
 
