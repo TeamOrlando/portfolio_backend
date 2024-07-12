@@ -6,9 +6,9 @@ export const userSchema = joi.object({
   firstName: joi.string().required(),
   lastName: joi.string().required(),
   email: joi.string().email().required(),
-  password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+  password: joi.string().min(6).required(),
   confirmPassword: joi.ref('password'),
-  userName: joi.string(),
+  userName: joi.string().required(),
   termsAndConditions: joi.boolean(),
 
 })
