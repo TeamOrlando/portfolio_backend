@@ -48,7 +48,7 @@ export const postProject = async (req, res, next) => {
     }
  }
 
-// delete Event
+// delete Project
 export const deleteProject = async (req, res, next) => {
     try {
         // Delete Project by id
