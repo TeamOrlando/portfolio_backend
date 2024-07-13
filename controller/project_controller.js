@@ -1,6 +1,7 @@
 import { ProjectModel } from "../models/projects_models.js";
 import {userSchema} from "../schema/projects_schema.js";
 
+// User validation
 export const project = (req, res) => {
     const {error, value} = userSchema.valideate(req.body);
 if(error){
@@ -8,7 +9,7 @@ if(error){
 }
 
 } 
-
+// defining EndPoints
 
 // get one Project
 export const getProject = async (req, res, next) => {
