@@ -36,6 +36,7 @@ export const addProfile = async (req, res) => {
   }
 };
 
+
 //update user profile
 export const updateUserProfile = async (req, res) => {
   try {
