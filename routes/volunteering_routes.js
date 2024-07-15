@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+import { checkUserSession } from "../middlewares/auth.js";
+
 import { VolunteeringModel } from "../models/volunteering_models.js";
 import { createVolunteeringRoles, deleteUserVolunteeringRoles, getAllVolunteeringRoles, updateUserVolunteeringRoles } from "../controller/volunteering_controller.js";
 
