@@ -1,4 +1,3 @@
-// import { User} from "../models/users_model.js";
 import { UserModel } from '../models/users_model.js'
 import { userSchema } from '../schema/user_schema.js'
 import * as bcrypt from 'bcrypt'
@@ -11,7 +10,6 @@ export const signup = async (req, res) => {
   if (error) {
     return res.status(400).send(error.details[0].message)
   }
-
   //validating user by email
   const email = value.email
   console.log('email', email)
@@ -28,6 +26,33 @@ export const signup = async (req, res) => {
     value.password = hashedPassword
     const addUser = await UserModel.create(value)
     return res.status(201).send(addUser)
+  }
+}
+//create userLogin
+
+export const Login = async (req, res, next) => {
+  //finding user by email,username or password
+  try {
+    const { email, username, password } = req.body;
+    const user = await UserModel.findOne(
+      { $or: [{ email: email }, { username: username }, { password: password }] }
+    )
+    //return response if user doesn't exist
+    if (!user)
+      res.status(401).json('User does not exist')
+
+    //verify user through password
+    const correctPassword = bcrypt.compareSync(password, user.password)
+    if (!correctPassword) {
+      res.status(401).json('Invalid credentials')
+    }
+    //now generate session for user if user exist to login
+    req.session.user = { id: user.id }
+    console.log(user, req.session.user)
+    //return response
+    res.status(401).json('Login successful')
+  } catch (error) {
+    next(error)
   }
 }
 

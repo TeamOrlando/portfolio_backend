@@ -1,56 +1,83 @@
+import { userProfileModel } from '../models/userprofile_model.js';
+import { UserModel } from '../models/users_model.js';
+import { userProfileSchema } from '../schema/user_profile_schema.js';
 
-import { userProfileModel } from "../models/userprofile_model.js";
-import { userProfileSchema } from "../schema/user_profile_schema.js";
 
+//create user profile
 export const addProfile = async (req, res) => {
-
   try {
-    const { error, value } = userProfileSchema.validate(req.body)
+    const { error, value } = userProfileSchema.validate({
+      ...req.body,
+      profilePicture: req.files.profilePicture[0].filename,
+      resume: req.files.resume[0].filename,
+    });
+
     if (error) {
-      return res.status(400).send(error.details[0].message)
+      return res.status(400).send(error.details[0].message);
     }
-
-    //create education with the value
-    const profile = await userProfileModel.create(value)
-
-    //after, find the user with the id that you passed when creating the profile 
-    const user = await userProfileModel.findById(value.user);
+    const userSessionId = req.session.user.id;
+    const user = await userProfileModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send('User not found');
     }
 
-    //if you find the user, push the profile id you just created inside
-    user.profile.push(profile._id);
+    const profile = await userProfileModel.create({
+      ...value,
+      user: userSessionId,
+    });
 
-    //and save the user now with the profileId
+    user.UserModel = profile._id;
+
     await user.save();
 
-    //return the profile
-    res.status(201).json({ profile })
-
+    res.status(201).json({ profile });
   } catch (error) {
-    return res.status(500).send(error)
+    console.log(error);
   }
-}
-//get all profile
-export const getAllUserProfile = async (req, res, next) => {
+};
 
+//update user profile
+export const updateUserProfile = async (req, res) => {
   try {
-    //we are fetching experience that belongs to a particular user
-    const userId = req.params.id
-    const allProfile = await userProfileModel.find({ user: userId })
-    if (allProfile.length == 0) {
-      return res.status(404).send('No experience added')
+    const { error, value } = userProfileSchema.validate({
+      ...req.body,
+      profilePicture: req.files.profilePicture[0].filename,
+      resume: req.files.resume[0].filename,
+    });
+
+    if (error) {
+      return res.status(400).send(error.details[0].message);
     }
-    res.status(200).json({ profile: allProfile })
+    const userSessionId = req.session.user.id;
+    const user = await UserModel.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    const profile = await userProfileModel.findByIdAndUpdate(
+      req.params.id,
+      value,
+      { new: true }
+    );
+    if (!profile) {
+      return res.status(404).send('Profile not found');
+    }
+
+    res.status(201).json({ profile });
   } catch (error) {
-    next(error)
+    console.log(error);
   }
+};
 
-}
-
-export const getOneProfile = async (req, res) => {
-  const profile = await userProfileModel.findById(req.params.id)
-  res.status(200).json(profile)
-
-}
+//get user profile
+export const getUserProfile = async (req, res) => {
+  try {
+    const userSessionId = req.session.user.id;
+    const profile = await userProfileModel.find({ user: userSessionId });
+    if (!profile) {
+      return res.status(404).send('No profile added');
+    }
+    res.status(200).json({ profile });
+  } catch (error) {
+    return res.status(500).json({ error });
+  }
+};
