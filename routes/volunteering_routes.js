@@ -1,21 +1,17 @@
 import { Router } from "express";
 
 import { VolunteeringModel } from "../models/volunteering_models.js";
-
-import { deletedvolunteeringRole, getVolunteeringRole, getVolunteeringRoles, postVolunteeringRole, updateVolunteeringRole } from "../controller/volunteering_controller.js";
-
-
-const volunteeringRouter = express.Router();
-
-volunteeringRouter.get('/volunteering/:id', getVolunteeringRole);
-
-volunteeringRouter.get('/volunteering', getVolunteeringRoles);
-
-volunteeringRouter.post('/volunteering', postVolunteeringRole);
-
-volunteeringRouter.patch('/volunteering', updateVolunteeringRole);
-
-volunteeringRouter.delete('/volunteering', deletedvolunteeringRole);
+import { createVolunteeringRoles, deleteUserVolunteeringRoles, getAllVolunteeringRoles, updateUserVolunteeringRoles } from "../controller/volunteering_controller.js";
 
 
-export default volunteeringRouter;
+
+
+export const volunteeringRouter = express.Router();
+
+volunteeringRouter.post('/users/volunteering', checkUserSession, createVolunteeringRoles)
+
+volunteeringRouter.get('/users/volunteering', checkUserSession, getAllVolunteeringRoles)
+
+volunteeringRouter.patch('/users/volunteering/:id', checkUserSession, updateUserVolunteeringRoles)
+
+volunteeringRouter.delete('/users/volunteering/:id', checkUserSession, deleteUserVolunteeringRoles)

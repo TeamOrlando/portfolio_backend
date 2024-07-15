@@ -3,61 +3,98 @@ import { SkillsSchema } from "../schema/skills_schema.js";
 import { UserModel } from "../models/users_model.js";
 
 
-
-// Get All Skills
-export const getSkills = async (req, res, next) => {
+export const createUserSkill = async (req, res) => {
     try {
-        const Allskills = await SkillsModel.find()
-        res.status(200).json(skills)
+      const { error, value } = SkillsSchema.validate(req.body);
+  
+      if (error) {
+        return res.status(400).send(error.details[0].message);
+      }
+  
+      const userSessionId = req.session.user.id;
+     
+      const user = await UserModel.findById(userSessionId);
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+  
+      const skill = await SkillsModel.create({ ...value, user: userSessionId });
+  
+      user.skills.push(skill._id)
+  
+      await user.save();
+  
+      res.status(201).json({ skill });
     } catch (error) {
-        next(error)
+      console.log(error);
     }
-};
-
-// Get one Skills
-export const getSkill = async (req, res, next) => {
+  };
+  
+  
+  
+  export const getAllUserSkills = async (req, res) => {
     try {
-        const Oneskill = await SkillsModel.findById(req.params.id)
-        res.status(200).json(skills)
+      //we are fetching Skill that belongs to a particular user
+      const userSessionId = req.session.user.id
+      const allSkill = await SkillsModel.find({ user: userSessionId });
+      if (allSkill.length == 0) {
+        return res.status(404).send("No Skill added");
+      }
+      res.status(200).json({ Skills: allSkill });
     } catch (error) {
-        next(error)
+      return res.status(500).json({error})
     }
-}
-
-
-
-//Create skills
-export const postSkills = async (req, res, next) => {
-    try {
-        const postedSkills = await SkillsModel.create(req.body)
-        res.status(201).json(Skills)
-    } catch (error) {
-        next(error)
-    }
-};
-//Update A Skill
-export const updateSkill = async (req, res, next) => {
-    try {
-        const SkillId = req.params.id;
-        const updatedSkills = await SkillsModel.findByIdAndUpdate(
-            { _id: eventId },
-            req.body,
-            { new: true })
-
-        res.status(200).json(updatedData)
-    } catch (error) {
-        next(error)
-    }
-};
-//delete Project
-export const deletedskill = async (req, res, next) => {
-    try {
-        // Delete Skill by id
-        const deletedProject = await ProjectModel.findByIdAndDelete(req.params.id);
-        // Return response
-        res.status(200).json(SkillDeleted);
-
-    } catch (error) {
-        next(error);
-    }
-}
+  };
+  
+  
+  
+  export const updateUserSkill = async (req, res) => {
+      try {
+        const { error, value } = SkillsSchema.validate(req.body);
+  
+    
+        if (error) {
+          return res.status(400).send(error.details[0].message);
+        }
+    
+        const userSessionId = req.session.user.id; 
+        const user = await UserModel.findById(userSessionId);
+        if (!user) {
+          return res.status(404).send("User not found");
+        }
+    
+        const skill = await SkillsModel.findByIdAndUpdate(req.params.id, value, { new: true });
+          if (!skill) {
+              return res.status(404).send("Skill not found");
+          }
+    
+        res.status(200).json({ skill });
+      } catch (error) {
+        return res.status(500).json({error})
+      }
+    };
+  
+  
+    export const deleteUserSkill = async (req, res) => {
+      try {
+       
+    
+        const userSessionId = req.session.user.id; 
+        const user = await UserModel.findById(userSessionId);
+        if (!user) {
+          return res.status(404).send("User not found");
+        }
+    
+        const skill = await SkillsModel.findByIdAndDelete(req.params.id);
+          if (!skill) {
+              return res.status(404).send("Skill not found");
+          }
+    
+          user.skills.pull(req.params.id);
+          await user.save();
+        res.status(200).json("Skill deleted");
+      } catch (error) {
+        return res.status(500).json({error})
+      }
+    };
+    

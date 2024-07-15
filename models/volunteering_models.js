@@ -10,7 +10,6 @@ const VolunteeringSchema = new Schema({
       user: { type: Types.ObjectId, ref: 'User' },
     },
   ],
-
 })
 
 export const VolunteeringModel = model('volunteering', VolunteeringSchema);
