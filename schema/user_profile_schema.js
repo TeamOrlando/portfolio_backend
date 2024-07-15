@@ -1,6 +1,5 @@
 import joi from "joi";
 
-
 export const userProfileSchema = joi.object({
   userProfile: {
     profilePicture: joi.string().required(),
@@ -12,3 +11,4 @@ export const userProfileSchema = joi.object({
   }
 
 })
+

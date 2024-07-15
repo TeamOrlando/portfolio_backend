@@ -1,69 +1,123 @@
-import { UserModel } from '../models/users_model.js'
-import { userSchema } from '../schema/user_schema.js'
-import * as bcrypt from 'bcrypt'
 
-//validating user credentials
+import { UserModel } from "../models/users_model.js";
+import { userSchema } from '../schema/user_schema.js'
+import bcrypt from "bcrypt";
 
 export const signup = async (req, res) => {
-  const { error, value } = userSchema.validate(req.body)
-  //handling errors
+  const { error, value } = userSchema.validate(req.body);
   if (error) {
-    return res.status(400).send(error.details[0].message)
+    return res.status(400).send(error.details[0].message);
   }
-  //validating user by email
-  const email = value.email
-  console.log('email', email)
+  const email = value.email;
 
-  //validating if user already exist
-  const findIfUserExist = await UserModel.findOne({ email })
-  //if user exist login
+  const findIfUserExist = await UserModel.findOne({ email });
   if (findIfUserExist) {
-    res.status(401).send('User already signup')
-  }
-  //if user isn't signup...sign user up
-  else {
-    const hashedPassword = await bcrypt.hash(value.password, 12)
-    value.password = hashedPassword
-    const addUser = await UserModel.create(value)
-    return res.status(201).send(addUser)
-  }
-}
-//create userLogin
+    return res.status(401).send("User has already signed up");
+  } else {
+    const hashedPassword = await bcrypt.hash(value.password, 12);
+    value.password = hashedPassword;
 
+    const addUser = await UserModel.create(value);
+
+    req.session.user = { id: addUser.id };
+
+    return res.status(201).send(addUser);
+  }
+};
+
+// Login user
 export const Login = async (req, res, next) => {
-  //finding user by email,username or password
   try {
-    const { email, username, password } = req.body;
-    const user = await UserModel.findOne(
-      { $or: [{ email: email }, { username: username }, { password: password }] }
-    )
-    //return response if user doesn't exist
-    if (!user)
-      res.status(401).json('User does not exist')
+    const { userName, email, password } = req.body;
+    //  Find a user using their email or username
+    const user = await UserModel.findOne({
+      $or: [{ email }, { userName }],
+    });
 
-    //verify user through password
-    const correctPassword = bcrypt.compareSync(password, user.password)
-    if (!correctPassword) {
-      res.status(401).json('Invalid credentials')
+    if (!user) {
+      return res.status(401).json("User does not exist");
+    } else {
+      const correctPass = await bcrypt.compare(password, user.password);
+      if (!correctPass) {
+        return res.status(401).json("Invalid login details");
+      }
+      // Generate a session for the user
+      req.session.user = { id: user.id };
+
+      res.status(201).json("Login successful");
     }
-    //now generate session for user if user exist to login
-    req.session.user = { id: user.id }
-    console.log(user, req.session.user)
-    //return response
-    res.status(401).json('Login successful')
+    // Verify user password
+
+  } catch (error) {
+    console.log(error)
+    next(error);
+  }
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const userName = req.params.userName.toLowerCase();
+
+    const options = { sort: { startDate: -1 } }
+    const userDetails = await UserModel.findOne({ userName }).select("-password")
+      .populate({
+        path: "education",
+        options,
+      })
+      .populate("userProfile")
+      .populate("skills")
+
+      .populate({
+        path: "achievements",
+        options: { sort: { date: -1 } },
+      })
+      .populate({
+        path: "experiences",
+        options,
+      })
+      .populate({
+        path: "volunteering",
+        options,
+      })
+      .populate({
+        path: 'projects',
+        options
+      });
+
+    return res.status(200).json({ user: userDetails });
   } catch (error) {
     next(error)
   }
-}
+};
 
-//user CRUD
-export const getUser = async (req, res) => {
-  const userId = req.params.id
-  //get user based on the user id
-  //use the select to exclude the password
-  //use populate to populate the education
-  const userDetails = await UserModel.findById(userId)
-    .select('-password')
-    .populate('education')
-  return res.status(201).json({ user: userDetails })
-}
+export const getUsers = async (req, res) => {
+
+
+  const email = req.query.email?.toLowerCase()
+  const userName = req.query.userName?.toLowerCase();
+
+  const filter = {};
+  if (email) {
+    filter.email = email;
+  }
+  if (userName) {
+    filter.userName = userName;
+  }
+
+  const users = await UserModel.find(filter);
+
+  return res.status(200).json({ users });
+};
+
+
+
+export const logout = async (req, res, next) => {
+  try {
+    // Destroy user session
+    await req.session.destroy();
+    // Return response
+    res.status(200).json("User logged out");
+  } catch (error) {
+    next(error);
+  }
+};

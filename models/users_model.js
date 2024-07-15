@@ -1,3 +1,4 @@
+import joi from "joi";
 import { model, Schema, Types } from "mongoose";
 
 
@@ -5,7 +6,7 @@ const userSchema = new Schema({
   firstName: { type: String },
   lastName: { type: String },
   otherNames: { type: String },
-  email: { type: String, unique: true },
+  email: { type: String, unique: true, required: true },
   password: { type: String },
   userName: { type: String },
   termsAndConditions: { type: Boolean },
