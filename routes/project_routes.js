@@ -1,18 +1,16 @@
 import { Router } from "express";
-import { deleteProject, getProject, getProjects, patchProject, postProject } from "../controller/project_controller.js";
+import { checkUserSession } from "../middlewares/auth.js";
 
-// create Router
-const ProjectRouter = Router();
-
-ProjectRouter.get('/projects', getProject);
-
-ProjectRouter.post('/Projects', postProject);
-
-ProjectRouter.patch('/projects', patchProject);
-
-ProjectRouter.delete('/projects', deleteProject);
-
-ProjectRouter.get('/projects', getProjects)
+import { remoteUpload } from "../middlewares/uploads.js";
+import { createUserProject, deleteUserProject, getAllUserProjects, updateUserProject } from "../controller/project_controller.js";
 
 
-export default ProjectRouter
+export const projectRouter = Router()
+
+projectRouter.post('/users/projects', remoteUpload.single('image'), checkUserSession, createUserProject)
+
+projectRouter.get('/users/projects', checkUserSession, getAllUserProjects)
+
+projectRouter.patch('/users/projects/:id', remoteUpload.single('image'), checkUserSession, updateUserProject)
+
+projectRouter.delete('/users/projects/:id',  checkUserSession, deleteUserProject)

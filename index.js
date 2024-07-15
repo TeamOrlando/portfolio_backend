@@ -6,6 +6,7 @@ import { profileRouter } from './routes/profile-routes.js';
 import { experienceRouter } from './routes/experience_routes.js';
 import { achievementRouter } from './routes/achievement_routes.js';
 import {volunteeringRouter} from './routes/volunteering_routes.js';
+import { projectRouter } from './routes/project_routes.js';
 import { skillRouter } from './routes/skills_routes.js';
 import session from 'express-session';
 
@@ -30,10 +31,11 @@ dbConnection()
 //help to solve conflicts with api-links
 portfolioApp.use('/api/v1', userRouter);
 portfolioApp.use('/api/v1', profileRouter);
-portfolioApp.use('/api/v1', experienceRouter)
-portfolioApp.use('/api/v1', achievementRouter)
-portfolioApp.use('/api/v1', volunteeringRouter)
-portfolioApp.use('/api/v1', skillRouter)
+portfolioApp.use('/api/v1', experienceRouter);
+portfolioApp.use('/api/v1', achievementRouter);
+portfolioApp.use('/api/v1', volunteeringRouter);
+portfolioApp.use('/api/v1', skillRouter);
+portfolioApp.use('/api/v1', projectRouter);
 
 //listening to server
 portfolioApp.listen(PORT, () => {
