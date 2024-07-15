@@ -2,15 +2,20 @@ import { model, Schema, Types } from "mongoose";
 
 
 const userSchema = new Schema({
-  user: {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, require: true, unique: true },
-    password: { type: String },
-    userName: { type: String, unique: true },
-    termsAndConditions: { type: Boolean },
-    user: { type: Types.ObjectId, ref: 'User' },
-  },
+  firstName: { type: String },
+  lastName: { type: String },
+  otherNames: { type: String },
+  email: { type: String, unique: true },
+  password: { type: String },
+  userName: { type: String },
+  termsAndConditions: { type: Boolean },
+  education: [{ type: Types.ObjectId, ref: 'Education' }],
+  skills: [{ type: Types.ObjectId, ref: 'Skill' }],
+  achievements: [{ type: Types.ObjectId, ref: 'Achievement' }],
+  projects: { type: Types.ObjectId, ref: 'Project' },
+  userProfile: [{ type: Types.ObjectId, ref: 'UserProfile' }],
+  volunteering: [{ type: Types.ObjectId, ref: 'Volunteering' }],
+  experiences: [{ type: Types.ObjectId, ref: 'Experiences' }],
 
 })
 
