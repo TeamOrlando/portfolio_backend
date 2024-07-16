@@ -4,14 +4,11 @@ const userProfileSchema = new Schema({
 
   profilePicture: { type: String },
   location: { type: String },
-  maritalStatus: {
-    type: String,
-    enum: ["single", "married", "prefer-not-to-say"],
-  },
   sex: { type: String, enum: ["male", "female"] },
   bio: { type: String },
   about: { type: String },
   dateOfBirth: { type: Date },
+  title: { type: String, enum: ["Mr", "Mrs", "Miss", "Dr", "Esq"] },
   contact: { type: String },
   resume: { type: String },
   languages: [{ type: String }],
@@ -22,4 +19,4 @@ const userProfileSchema = new Schema({
 
 })
 
-export const userProfileModel = model('userProfile', userProfileSchema);
+export const userProfileModel = model('UserProfile', userProfileSchema);

@@ -1,10 +1,15 @@
-import { Router } from "express";
-import { addExperience, deleteExperience, getAllUserExperience, updateExperience } from "../controller/experience_controller.js";
+import { createUserExperience, deleteUserExperience, getAllUserExperience, updateUserExperience } from "../controller/experience_controller.js";
+import { checkUserSession } from "../middlewares/auth.js";
 
-//defining routes
-export const experienceRouter = Router();
-experienceRouter.post('/users/experience', addExperience)
-// experienceRouter.get('/users/experience/:id', getExperienceById)
-experienceRouter.get('/users/experience', getAllUserExperience)
-experienceRouter.patch('/users/experience/:id', updateExperience)
-experienceRouter.delete('/users/experience/:id', deleteExperience)
+import { Router } from "express";
+
+
+export const experienceRouter = Router()
+
+experienceRouter.post('/users/experiences', checkUserSession, createUserExperience)
+
+experienceRouter.get('/users/experiences', checkUserSession, getAllUserExperience)
+
+experienceRouter.patch('/users/experiences/:id', checkUserSession, updateUserExperience)
+
+experienceRouter.delete('/users/experiences/:id', checkUserSession, deleteUserExperience)

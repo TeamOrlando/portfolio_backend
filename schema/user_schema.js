@@ -12,4 +12,3 @@ export const userSchema = joi.object({
   termsAndConditions: joi.boolean(),
 
 }).with('password', 'confirmedPassword');
-
