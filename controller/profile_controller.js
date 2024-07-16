@@ -69,11 +69,12 @@ export const updateUserProfile = async (req, res) => {
   }
 };
 
-//get user profile
+//get user from session or request
 export const getUserProfile = async (req, res) => {
   try {
-    const userSessionId = req.session.user.id;
-    const profile = await userProfileModel.find({ user: userSessionId });
+    //replace with anywhere there's req.session.id
+    const id = req.session?.user.id || req?.user.id;
+    const profile = await userProfileModel.findById(id);
     if (!profile) {
       return res.status(404).send('No profile added');
     }
