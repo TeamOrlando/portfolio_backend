@@ -78,8 +78,6 @@ export const updateUserEducation = async (req, res) => {
 
 export const deleteUserEducation = async (req, res) => {
   try {
-
-
     const userId = req.session?.user?.id || req?.user.id;
     const user = await User.findById(userId);
     if (!user) {

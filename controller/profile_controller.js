@@ -83,3 +83,24 @@ export const getUserProfile = async (req, res) => {
     return res.status(500).json({ error })
   }
 };
+
+export const deleteUserProfile = async (req, res) => {
+  try {
+    const userSessionId = req.session.user.id;
+    const user = await UserProfile.findById(userSessionId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+    const profile = await UserProfile.findByIdAndDelete(req.params.id);
+    if (!profile) {
+      return res.status(404).send("Profile not found");
+    }
+
+    user.profile.pull(req.params.id);
+    await user.save();
+
+    res.status(200).json("Profile deleted");
+  } catch (error) {
+    return res.status(500).json({ error })
+  }
+};
