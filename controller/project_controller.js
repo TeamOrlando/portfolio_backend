@@ -4,6 +4,8 @@ import { UserModel } from "../models/users_model.js";
 
 import { ProjectModel } from "../models/projects_models.js";
 
+
+//create project
 export const createUserProject = async (req, res) => {
   try {
     const { error, value } = ProjectSchema.validate({ ...req.body, image: req.file.filename });
@@ -32,7 +34,7 @@ export const createUserProject = async (req, res) => {
 };
 
 
-
+//get all user projects
 export const getAllUserProjects = async (req, res) => {
   try {
     //we are fetching Project that belongs to a particular user
@@ -48,7 +50,7 @@ export const getAllUserProjects = async (req, res) => {
 };
 
 
-
+//updating a user project
 export const updateUserProject = async (req, res) => {
   try {
     const { error, value } = ProjectSchema.validate({ ...req.body, image: req.file.filename });
@@ -75,22 +77,18 @@ export const updateUserProject = async (req, res) => {
   }
 };
 
-
+// deleting user project
 export const deleteUserProject = async (req, res) => {
   try {
-
-
     const userSessionId = req.session.user.id;
     const user = await UserModel.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }
-
     const project = await ProjectModel.findByIdAndDelete(req.params.id);
     if (!project) {
       return res.status(404).send("Project not found");
     }
-
     user.projects.pull(req.params.id);
     await user.save();
     res.status(200).json("Project deleted");

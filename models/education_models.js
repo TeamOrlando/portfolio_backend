@@ -1,7 +1,7 @@
 import { Schema, model, Types } from "mongoose";
 
-const educationSchema = new Schema({
 
+const EducationSchema = new Schema({
   schoolName: { type: String },
   location: { type: String },
   program: { type: String },
@@ -13,4 +13,4 @@ const educationSchema = new Schema({
 }, {
   timestamps: true
 });
-export const Education = model("Education", educationSchema);
+export const Education = model("Education", EducationSchema);

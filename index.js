@@ -13,6 +13,7 @@ import { skillRouter } from './routes/skills_routes.js';
 import cors from "cors"
 import expressOasGenerator from '@mickeymond/express-oas-generator'
 import session from 'express-session';
+import { educationRouter } from './routes/education_routes.js';
 
 
 
@@ -48,6 +49,8 @@ portfolioApp.use('/api/v1', achievementRouter);
 portfolioApp.use('/api/v1', volunteeringRouter);
 portfolioApp.use('/api/v1', skillRouter);
 portfolioApp.use('/api/v1', projectRouter);
+portfolioApp.use('/api/v1', educationRouter)
+
 
 expressOasGenerator.handleRequests();
 portfolioApp.use((req, res) => res.redirect('/api-docs/'));

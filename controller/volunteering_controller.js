@@ -1,13 +1,11 @@
 import { volunteeringModel } from "../models/volunteering_models.js";
-
-import { ProjectSchema } from "../schema/projects_schema.js";
 import { VolunteeringSchema } from "../schema/volunteering_schema.js";
 import { UserModel } from "../models/users_model.js";
 
-import { ProjectModel } from "../models/projects_models.js";
 
 
 
+//create volunteering
 export const createVolunteering = async (req, res) => {
   try {
     const { error, value } = VolunteeringSchema.validate(req.body);
@@ -38,7 +36,9 @@ export const createVolunteering = async (req, res) => {
   }
 };
 
-export const getAllVolunteerings = async (req, res) => {
+
+//get all user volunteering
+export const getAllVolunteering = async (req, res) => {
   try {
     //we are fetching Volunteering that belongs to a particular user
     const userSessionId = req.session.user.id;
@@ -46,12 +46,14 @@ export const getAllVolunteerings = async (req, res) => {
     if (allVolunteering.length == 0) {
       return res.status(404).send("No Volunteering added");
     }
-    res.status(200).json({ Volunteerings: allVolunteering });
+    res.status(200).json({ Volunteering: allVolunteering });
   } catch (error) {
     return res.status(500).json({ error });
   }
 };
 
+
+//updating user volunteering
 export const updateVolunteering = async (req, res) => {
   try {
     const { error, value } = VolunteeringSchema.validate(req.body);
@@ -81,6 +83,8 @@ export const updateVolunteering = async (req, res) => {
   }
 };
 
+
+//delete user volunteering
 export const deleteVolunteering = async (req, res) => {
   try {
     const userSessionId = req.session.user.id;
