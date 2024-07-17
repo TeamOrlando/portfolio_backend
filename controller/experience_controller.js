@@ -16,7 +16,7 @@ export const createUserExperience = async (req, res) => {
     const userSessionId = req.session.user.id;
 
 
-    const user = await UserModel.findById(userSessionId);
+    const user = await User.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -60,7 +60,7 @@ export const updateUserExperience = async (req, res) => {
     }
 
     const userSessionId = req.session.user.id;
-    const user = await UserModel.findById(userSessionId);
+    const user = await User.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }
@@ -82,7 +82,7 @@ export const deleteUserExperience = async (req, res) => {
 
 
     const userSessionId = req.session.user.id;
-    const user = await UserModel.findById(userSessionId);
+    const user = await User.findById(userSessionId);
     if (!user) {
       return res.status(404).send("User not found");
     }

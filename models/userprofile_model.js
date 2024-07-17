@@ -19,4 +19,4 @@ const userProfileSchema = new Schema({
 
 })
 
-export const userProfileModel = model('UserProfile', userProfileSchema);
+export const UserProfile = model('UserProfile', userProfileSchema)

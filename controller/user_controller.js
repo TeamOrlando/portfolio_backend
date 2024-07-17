@@ -60,10 +60,10 @@ export const getUser = async (req, res, next) => {
 
     const options = { sort: { startDate: -1 } }
     const userDetails = await UserModel.findOne({ userName }).select("-password")
-      .populate({
-        path: "education",
-        options,
-      })
+      // .populate({
+      //   path: "education",
+      //   options,
+      // })
       .populate("userProfile")
       .populate("skills")
 
@@ -86,7 +86,7 @@ export const getUser = async (req, res, next) => {
 
     return res.status(200).json({ user: userDetails });
   } catch (error) {
-    next()
+    next(error)
   }
 };
 

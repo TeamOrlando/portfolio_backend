@@ -9,4 +9,4 @@ const achievementsSchema = new Schema({
   user: { type: Types.ObjectId, ref: 'User' },
 })
 
-export const AchievementsModel = model('Achievements', achievementsSchema);
+export const AchievementsModel = model('Achievement', achievementsSchema);

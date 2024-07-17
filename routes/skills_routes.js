@@ -7,7 +7,7 @@ import { createUserSkill, deleteUserSkill, getAllUserSkills, updateUserSkill } f
 
 export const skillRouter = Router()
 
-skillRouter.post('/users/skills', checkUserSession, createUserSkill )
+skillRouter.post('/users/skills', checkUserSession, createUserSkill)
 
 skillRouter.get('/users/skills', checkUserSession, getAllUserSkills)
 

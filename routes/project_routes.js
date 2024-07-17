@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { checkUserSession } from "../middlewares/auth.js";
-
 import { remoteUpload } from "../middlewares/uploads.js";
 import { createUserProject, deleteUserProject, getAllUserProjects, updateUserProject } from "../controller/project_controller.js";
 
@@ -13,4 +12,4 @@ projectRouter.get('/users/projects', checkUserSession, getAllUserProjects)
 
 projectRouter.patch('/users/projects/:id', remoteUpload.single('image'), checkUserSession, updateUserProject)
 
-projectRouter.delete('/users/projects/:id',  checkUserSession, deleteUserProject)
+projectRouter.delete('/users/projects/:id', checkUserSession, deleteUserProject)

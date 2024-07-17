@@ -1,5 +1,5 @@
 import { volunteeringModel } from "../models/volunteering_models.js";
-import { userProfileModel } from "../models/userprofile_model.js";
+
 import { ProjectSchema } from "../schema/projects_schema.js";
 import { VolunteeringSchema } from "../schema/volunteering_schema.js";
 import { UserModel } from "../models/users_model.js";

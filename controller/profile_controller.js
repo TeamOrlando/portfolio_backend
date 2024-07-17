@@ -1,4 +1,4 @@
-import { userProfileModel } from "../models/userProfile_model.js";
+import { UserProfile } from '../models/userprofile_model.js'
 import { UserModel } from "../models/users_model.js";
 import { userProfileSchema } from "../schema/user_profile_schema.js";
 
@@ -24,7 +24,7 @@ export const addProfile = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
-    const profile = await userProfileModel.create({ ...value, user: userSessionId });
+    const profile = await UserProfile.create({ ...value, user: userSessionId });
 
     user.userProfile = profile._id;
 
@@ -56,7 +56,7 @@ export const updateUserProfile = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
-    const profile = await userProfileModel.findByIdAndUpdate(req.params.id, value, { new: true });
+    const profile = await UserProfile.findByIdAndUpdate(req.params.id, value, { new: true });
     if (!profile) {
       return res.status(404).send("Profile not found");
     }
@@ -74,7 +74,7 @@ export const getUserProfile = async (req, res) => {
   try {
 
     const userSessionId = req.session.user.id
-    const profile = await userProfileModel.find({ user: userSessionId });
+    const profile = await UserProfile.find({ user: userSessionId });
     if (!profile) {
       return res.status(404).send("No profile added");
     }
