@@ -1,14 +1,18 @@
-import joi from "joi";
+
+import joi from 'joi'
+
 
 export const userProfileSchema = joi.object({
-  userProfile: {
-    profilePicture: joi.string().required(),
-    location: joi.string(),
-    about: joi.string(),
-    contact: joi.string(),
-    languages: joi.string(),
-    resume: joi.string().required()
-  }
-
+  profilePicture: joi.string(),
+  location: joi.string(),
+  maritalStatus: joi.string().valid('single', 'married', 'prefer-not-to-say'),
+  sex: joi.string().valid('male', 'female'),
+  bio: joi.string(),
+  title: joi.string(),
+  about: joi.string(),
+  dateOfBirth: joi.date(),
+  contact: joi.string(),
+  resume: joi.string(),
+  languages: joi.array().items(joi.string()),
+  user: joi.string()
 })
-

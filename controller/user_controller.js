@@ -1,6 +1,6 @@
 
 import { UserModel } from "../models/users_model.js";
-import { userSchema } from '../schema/user_schema.js'
+import { userSchema } from "../schema/user_schema.js";
 import bcrypt from "bcrypt";
 
 export const signup = async (req, res) => {
@@ -21,7 +21,7 @@ export const signup = async (req, res) => {
 
     req.session.user = { id: addUser.id };
 
-    return res.status(201).send(addUser);
+    return res.status(201).json({ 'message': "Registration successful" });
   }
 };
 
@@ -60,10 +60,10 @@ export const getUser = async (req, res, next) => {
 
     const options = { sort: { startDate: -1 } }
     const userDetails = await UserModel.findOne({ userName }).select("-password")
-      .populate({
-        path: "education",
-        options,
-      })
+      // .populate({
+      //   path: "education",
+      //   options,
+      // })
       .populate("userProfile")
       .populate("skills")
 

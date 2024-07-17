@@ -1,4 +1,4 @@
-import { model, Schema, Types} from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
 const projectSchema = new Schema({
   projectName: { type: String },
@@ -6,11 +6,12 @@ const projectSchema = new Schema({
   contributors: { type: String },
   skills: { type: String },
   link: { type: String },
+  image: { type: String },
   nameOfInstitution: { type: String },
   startDate: { type: String },
   endDate: { type: String },
   user: { type: Types.ObjectId, ref: 'User' }
-  
+
 })
 
 export const ProjectModel = model('Projects', projectSchema);

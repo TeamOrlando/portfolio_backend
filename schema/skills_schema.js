@@ -1,8 +1,9 @@
 import joi from 'joi'
 
 
-export const SkillsSchema = joi.object({
-  name: joi.string(),
-  levelOfProficiency: joi.string()
+export const skillsSchema = joi.object({
+  name: joi.string().required(),
+  levelOfProficiency: joi.string().valid('beginner', 'advanced', 'expert'),
+  user: joi.string()
 })
 

@@ -9,4 +9,4 @@ const skillsSchema = new Schema({
   user: { type: Types.ObjectId, ref: 'User' },
 });
 
-export const SkillsModel = model('Skills', skillsSchema);
+export const SkillsModel = model('Skill', skillsSchema);
