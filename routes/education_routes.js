@@ -3,7 +3,6 @@ import { checkUAuth } from "../middlewares/auth.js";
 
 import { Router } from "express";
 
-
 export const educationRouter = Router()
 
 educationRouter.post('/users/education', checkUAuth, addEducation)

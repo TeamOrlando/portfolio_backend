@@ -1,7 +1,7 @@
 import { Schema, model, Types } from "mongoose";
 
-const educationSchema = new Schema({
 
+const educationSchema = new Schema({
   schoolName: { type: String },
   location: { type: String },
   program: { type: String },

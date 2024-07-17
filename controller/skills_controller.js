@@ -2,7 +2,7 @@ import { SkillsModel } from "../models/skills_model.js"
 import { skillsSchema } from "../schema/skills_schema.js";
 import { UserModel } from "../models/users_model.js";
 
-
+//create skills
 export const createUserSkill = async (req, res) => {
   try {
     const { error, value } = skillsSchema.validate(req.body);
@@ -31,7 +31,7 @@ export const createUserSkill = async (req, res) => {
 };
 
 
-
+//get all user skills
 export const getAllUserSkills = async (req, res) => {
   try {
     //we are fetching Skill that belongs to a particular user
@@ -47,7 +47,7 @@ export const getAllUserSkills = async (req, res) => {
 };
 
 
-
+//updating user skills
 export const updateUserSkill = async (req, res) => {
   try {
     const { error, value } = skillsSchema.validate(req.body);
@@ -74,7 +74,7 @@ export const updateUserSkill = async (req, res) => {
   }
 };
 
-
+// delete user skills
 export const deleteUserSkill = async (req, res) => {
   try {
 
