@@ -40,9 +40,9 @@ export const getAllUserProjects = async (req, res) => {
     //we are fetching Project that belongs to a particular user
     const userSessionId = req.session.user.id
     const allProject = await ProjectModel.find({ user: userSessionId });
-    if (allProject.length == 0) {
-      return res.status(404).send("No Project added");
-    }
+    // if (allProject.length == 0) {
+    //   return res.status(404).send("No Project added");
+    // }
     res.status(200).json({ Projects: allProject });
   } catch (error) {
     return res.status(500).json({ error })

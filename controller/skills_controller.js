@@ -37,9 +37,9 @@ export const getAllUserSkills = async (req, res) => {
     //we are fetching Skill that belongs to a particular user
     const userSessionId = req.session.user.id
     const allSkill = await SkillsModel.find({ user: userSessionId });
-    if (allSkill.length == 0) {
-      return res.status(404).send("No Skill added");
-    }
+    // if (allSkill.length == 0) {
+    //   return res.status(404).send("No Skill added");
+    // }
     res.status(200).json({ Skills: allSkill });
   } catch (error) {
     return res.status(500).json({ error })

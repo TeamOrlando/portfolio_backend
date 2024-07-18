@@ -4,7 +4,7 @@ import { userProfileSchema } from "../schema/user_profile_schema.js";
 
 
 
-export const addProfile = async (req, res) => {
+export const addProfile = async (req, res, next) => {
   try {
     const { error, value } = userProfileSchema.validate({
       ...req.body,
@@ -33,6 +33,7 @@ export const addProfile = async (req, res) => {
     res.status(201).json({ profile });
   } catch (error) {
     console.log(error);
+    next(error);
   }
 };
 

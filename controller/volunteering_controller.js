@@ -43,9 +43,9 @@ export const getAllVolunteering = async (req, res) => {
     //we are fetching Volunteering that belongs to a particular user
     const userSessionId = req.session.user.id;
     const allVolunteering = await volunteeringModel.find({ user: userSessionId });
-    if (allVolunteering.length == 0) {
-      return res.status(404).send("No Volunteering added");
-    }
+    // if (allVolunteering.length == 0) {
+    //   return res.status(404).send("No Volunteering added");
+    // }
     res.status(200).json({ Volunteering: allVolunteering });
   } catch (error) {
     return res.status(500).json({ error });
