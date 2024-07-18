@@ -6,7 +6,7 @@ import { ProjectModel } from "../models/projects_models.js";
 
 
 //create project
-export const createUserProject = async (req, res) => {
+export const createUserProject = async (req, res, next) => {
   try {
     const { error, value } = ProjectSchema.validate({ ...req.body, image: req.file.filename });
 
@@ -27,9 +27,10 @@ export const createUserProject = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ project });
+    res.status(201).json({ message: "Project Added Successfully", project });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 
@@ -40,9 +41,9 @@ export const getAllUserProjects = async (req, res) => {
     //we are fetching Project that belongs to a particular user
     const userSessionId = req.session.user.id
     const allProject = await ProjectModel.find({ user: userSessionId });
-    if (allProject.length == 0) {
-      return res.status(404).send("No Project added");
-    }
+    // if (allProject.length == 0) {
+    //   return res.status(404).send("No Project added");
+    // }
     res.status(200).json({ Projects: allProject });
   } catch (error) {
     return res.status(500).json({ error })

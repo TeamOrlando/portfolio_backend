@@ -6,7 +6,7 @@ import { UserModel } from "../models/users_model.js";
 
 
 //create volunteering
-export const createVolunteering = async (req, res) => {
+export const createVolunteering = async (req, res, next) => {
   try {
     const { error, value } = VolunteeringSchema.validate(req.body);
 
@@ -30,9 +30,10 @@ export const createVolunteering = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ volunteering });
+    res.status(201).json({ message: "Volunteering Added Successfully", volunteering });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 
@@ -43,9 +44,9 @@ export const getAllVolunteering = async (req, res) => {
     //we are fetching Volunteering that belongs to a particular user
     const userSessionId = req.session.user.id;
     const allVolunteering = await volunteeringModel.find({ user: userSessionId });
-    if (allVolunteering.length == 0) {
-      return res.status(404).send("No Volunteering added");
-    }
+    // if (allVolunteering.length == 0) {
+    //   return res.status(404).send("No Volunteering added");
+    // }
     res.status(200).json({ Volunteering: allVolunteering });
   } catch (error) {
     return res.status(500).json({ error });

@@ -5,7 +5,7 @@ import { ExperienceSchema } from "../schema/experience_schema.js";
 import { UserModel } from "../models/users_model.js";
 
 
-export const createUserExperience = async (req, res) => {
+export const createUserExperience = async (req, res, next) => {
   try {
     const { error, value } = ExperienceSchema.validate(req.body);
 
@@ -27,9 +27,10 @@ export const createUserExperience = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ experience });
+    res.status(201).json({ message: "Experience Added Successfully", experience });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 
@@ -40,9 +41,9 @@ export const getAllUserExperience = async (req, res) => {
     //we are fetching Experience that belongs to a particular user
     const userSessionId = req.session.user.id
     const allExperience = await ExperienceModel.find({ user: userSessionId });
-    if (allExperience.length == 0) {
-      return res.status(404).send("No Experience added");
-    }
+    // if (allExperience.length == 0) {
+    //   return res.status(404).send("No Experience added");
+    // }
     res.status(200).json({ Experience: allExperience });
   } catch (error) {
     return res.status(500).json({ error })

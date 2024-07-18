@@ -28,7 +28,7 @@ export const createUserAchievement = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ achievement });
+    res.status(201).json({ message: "Achievement Added Successfully", achievement });
   } catch (error) {
     console.log(error);
   }

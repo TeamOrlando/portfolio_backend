@@ -3,7 +3,7 @@ import { skillsSchema } from "../schema/skills_schema.js";
 import { UserModel } from "../models/users_model.js";
 
 //create skills
-export const createUserSkill = async (req, res) => {
+export const createUserSkill = async (req, res, next) => {
   try {
     const { error, value } = skillsSchema.validate(req.body);
 
@@ -24,9 +24,10 @@ export const createUserSkill = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ skill });
+    res.status(201).json({ message: "Skill Added Successfully", skill });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 
@@ -37,9 +38,9 @@ export const getAllUserSkills = async (req, res) => {
     //we are fetching Skill that belongs to a particular user
     const userSessionId = req.session.user.id
     const allSkill = await SkillsModel.find({ user: userSessionId });
-    if (allSkill.length == 0) {
-      return res.status(404).send("No Skill added");
-    }
+    // if (allSkill.length == 0) {
+    //   return res.status(404).send("No Skill added");
+    // }
     res.status(200).json({ Skills: allSkill });
   } catch (error) {
     return res.status(500).json({ error })
