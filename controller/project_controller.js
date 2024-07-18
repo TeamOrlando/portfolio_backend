@@ -6,7 +6,7 @@ import { ProjectModel } from "../models/projects_models.js";
 
 
 //create project
-export const createUserProject = async (req, res) => {
+export const createUserProject = async (req, res, next) => {
   try {
     const { error, value } = ProjectSchema.validate({ ...req.body, image: req.file.filename });
 
@@ -27,9 +27,10 @@ export const createUserProject = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ project });
+    res.status(201).json({ message: "Project Added Successfully", project });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 

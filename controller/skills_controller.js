@@ -3,7 +3,7 @@ import { skillsSchema } from "../schema/skills_schema.js";
 import { UserModel } from "../models/users_model.js";
 
 //create skills
-export const createUserSkill = async (req, res) => {
+export const createUserSkill = async (req, res, next) => {
   try {
     const { error, value } = skillsSchema.validate(req.body);
 
@@ -24,9 +24,10 @@ export const createUserSkill = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ skill });
+    res.status(201).json({ message: "Skill Added Successfully", skill });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 

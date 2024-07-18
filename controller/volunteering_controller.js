@@ -6,7 +6,7 @@ import { UserModel } from "../models/users_model.js";
 
 
 //create volunteering
-export const createVolunteering = async (req, res) => {
+export const createVolunteering = async (req, res, next) => {
   try {
     const { error, value } = VolunteeringSchema.validate(req.body);
 
@@ -30,9 +30,10 @@ export const createVolunteering = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ volunteering });
+    res.status(201).json({ message: "Volunteering Added Successfully", volunteering });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 

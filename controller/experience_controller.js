@@ -5,7 +5,7 @@ import { ExperienceSchema } from "../schema/experience_schema.js";
 import { UserModel } from "../models/users_model.js";
 
 
-export const createUserExperience = async (req, res) => {
+export const createUserExperience = async (req, res, next) => {
   try {
     const { error, value } = ExperienceSchema.validate(req.body);
 
@@ -27,9 +27,10 @@ export const createUserExperience = async (req, res) => {
 
     await user.save();
 
-    res.status(201).json({ experience });
+    res.status(201).json({ message: "Experience Added Successfully", experience });
   } catch (error) {
     console.log(error);
+    next(error)
   }
 };
 

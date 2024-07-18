@@ -4,7 +4,7 @@ import { EducationSchema } from "../schema/education_schema.js";
 
 
 //create user education
-export const addEducation = async (req, res) => {
+export const addEducation = async (req, res, next) => {
   try {
     const { error, value } = EducationSchema.validate(req.body);
     if (error) {
@@ -26,9 +26,10 @@ export const addEducation = async (req, res) => {
     await user.save();
 
     //return the education
-    res.status(201).json({ education });
+    res.status(201).json({ message: "Education Added Successfully", education });
   } catch (error) {
     return res.status(500).send(error);
+    next(error)
   }
 };
 

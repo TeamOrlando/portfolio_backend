@@ -30,7 +30,7 @@ export const addProfile = async (req, res, next) => {
 
     await user.save();
 
-    res.status(201).json({ profile });
+    res.status(201).json({ message: "Profile Added Successfully", profile });
   } catch (error) {
     console.log(error);
     next(error);
