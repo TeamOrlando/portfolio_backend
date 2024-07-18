@@ -1,5 +1,5 @@
 import { model, Schema, Types } from "mongoose";
-
+import { toJSON } from "@reis/mongoose-to-json";
 const volunteeringSchema = new Schema({
   organization: { type: String },
   description: { type: String },
@@ -13,4 +13,5 @@ const volunteeringSchema = new Schema({
   user: { type: Types.ObjectId, ref: 'User' }
 
 })
+volunteeringSchema.plugin(toJSON)
 export const volunteeringModel = model('Volunteering', volunteeringSchema);
