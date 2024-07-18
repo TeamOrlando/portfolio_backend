@@ -1,7 +1,8 @@
-
 import { UserModel } from "../models/users_model.js";
 import { userSchema } from "../schema/user_schema.js";
 import bcrypt from "bcrypt";
+import jwt from 'jsonwebtoken'
+
 
 export const signup = async (req, res) => {
   const { error, value } = userSchema.validate(req.body);
@@ -17,11 +18,9 @@ export const signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(value.password, 12);
     value.password = hashedPassword;
 
-    const addUser = await UserModel.create(value);
+    await User.create(value);
 
-    req.session.user = { id: addUser.id };
-
-    return res.status(201).json({ 'message': "Registration successful" });
+    return res.status(201).json({ message: "Registration successful" });
   }
 };
 
@@ -41,10 +40,51 @@ export const Login = async (req, res, next) => {
       if (!correctPass) {
         return res.status(401).json("Invalid login details");
       }
+
       // Generate a session for the user
       req.session.user = { id: user.id };
 
-      res.status(201).json("Login successful");
+      res.status(201).json({
+        message: "Login successful",
+
+      });
+    }
+    // Verify user password
+
+  } catch (error) {
+    console.log(error)
+    next(error);
+  }
+};
+
+
+
+export const token = async (req, res, next) => {
+  try {
+    const { userName, email, password } = req.body;
+    //  Find a user using their email or username
+    const user = await UserModel.findOne({
+      $or: [{ email }, { userName }],
+    });
+
+    if (!user) {
+      return res.status(401).json("User does not exist");
+    } else {
+      const correctPass = await bcrypt.compare(password, user.password);
+      if (!correctPass) {
+        return res.status(401).json("Invalid login details");
+      }
+
+
+      const token = jwt.sign({ id: user.id }, process.env.JWT_PRIVATE_KEY, { expiresIn: '2hr' })
+      // Generate a session for the user
+
+
+      res.status(201).json({
+        message: "User logged in",
+        accessToken: token
+
+      });
     }
     // Verify user password
 
@@ -60,10 +100,10 @@ export const getUser = async (req, res, next) => {
 
     const options = { sort: { startDate: -1 } }
     const userDetails = await UserModel.findOne({ userName }).select("-password")
-      // .populate({
-      //   path: "education",
-      //   options,
-      // })
+      .populate({
+        path: "education",
+        options,
+      })
       .populate("userProfile")
       .populate("skills")
 
@@ -86,7 +126,7 @@ export const getUser = async (req, res, next) => {
 
     return res.status(200).json({ user: userDetails });
   } catch (error) {
-    next(error)
+    next()
   }
 };
 

@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { checkUserSession } from "../middlewares/auth.js";
+import { checkUserAuth } from "../middlewares/auth.js";
 import { addProfile, getUserProfile, updateUserProfile } from "../controller/profile_controller.js";
 import { remoteUpload } from "../middlewares/uploads.js";
 
@@ -8,7 +8,7 @@ import { remoteUpload } from "../middlewares/uploads.js";
 // //defining router
 export const profileRouter = Router();
 
-profileRouter.get("/users/userProfile", checkUserSession, getUserProfile);
+profileRouter.get("/users/userProfile", checkUserAuth, getUserProfile);
 
 profileRouter.post(
   "/users/userProfile",
@@ -16,7 +16,7 @@ profileRouter.post(
     { name: "profilePicture", maxCount: 1 },
     { name: "resume", maxCount: 1 },
   ]),
-  checkUserSession,
+  checkUserAuth,
   addProfile
 );
 
@@ -27,6 +27,6 @@ profileRouter.patch(
     { name: "profilePicture", maxCount: 1 },
     { name: "resume", maxCount: 1 },
   ]),
-  checkUserSession,
+  checkUserAuth,
   updateUserProfile
 );
