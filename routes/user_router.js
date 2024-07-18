@@ -1,19 +1,21 @@
 
 import { Router } from "express";
-import { checkUserSession } from "../middlewares/auth.js";
+import { checkUserAuth } from "../middlewares/auth.js";
 import { remoteUpload } from "../middlewares/uploads.js";
-import { getUser, getUsers, Login, signup } from "../controller/user_controller.js";
+import { getUser, getUsers, Login, signup, token, logout } from "../controller/user_controller.js";
 import { addProfile, getUserProfile, updateUserProfile } from "../controller/profile_controller.js";
 
 
 
 export const userRouter = Router();
 
-userRouter.get("/users", getUsers);
-userRouter.post("/users/auth/login", Login);
 userRouter.post("/users/auth/signup", signup);
+userRouter.post("/users/auth/session/login", Login);
+userRouter.post("/users/auth/token/login", token);
+userRouter.get("/users", getUsers);
 userRouter.get("/users/auth/:userName", getUser);
-userRouter.get("/users/userProfile", getUserProfile);
+userRouter.get("/users/userProfile", checkUserAuth, getUserProfile);
+userRouter.post("/users/auth/logout", logout);
 
 userRouter.post(
   "/users/userProfile",
@@ -21,7 +23,7 @@ userRouter.post(
     { name: "profilePicture", maxCount: 1 },
     { name: "resume", maxCount: 1 },
   ]),
-  checkUserSession,
+  checkUserAuth,
   addProfile
 );
 
@@ -32,6 +34,6 @@ userRouter.patch(
     { name: "profilePicture", maxCount: 1 },
     { name: "resume", maxCount: 1 },
   ]),
-  checkUserSession,
+  checkUserAuth,
   updateUserProfile
 );
