@@ -9,11 +9,11 @@ import { addProfile, getUserProfile, updateUserProfile } from "../controller/pro
 
 export const userRouter = Router();
 
-userRouter.get("/users", getUsers);
-userRouter.post("/users/auth/login", Login);
-userRouter.post("/users/auth/signup", signup);
-userRouter.get("/users/auth/:userName", getUser);
-userRouter.get("/users/userProfile", getUserProfile);
+userRouter.get("/users", checkUserSession, getUsers);
+userRouter.post("/users/auth/login", checkUserSession, Login);
+userRouter.post("/users/auth/signup", checkUserSession, signup);
+userRouter.get("/users/auth/:userName", checkUserSession, getUser);
+userRouter.get("/users/userProfile", checkUserSession, getUserProfile);
 
 userRouter.post(
   "/users/userProfile",
