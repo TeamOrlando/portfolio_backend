@@ -8,23 +8,23 @@ export const addProfile = async (req, res, next) => {
   try {
     const { error, value } = userProfileSchema.validate({
       ...req.body,
-      profilePicture: req.files.profilePicture[0].filename,
-      resume: req.files.resume[0].filename,
+      profilePicture: req.files?.profilePicture[0].filename,
+      resume: req.files?.resume[0].filename,
     });
 
     if (error) {
       return res.status(400).send(error.details[0].message);
     }
 
-    const userSessionId = req.session.user.id;
+    const userId = req.session?.user?.id || req?.user.id;
 
 
-    const user = await UserModel.findById(userSessionId);
+    const user = await UserModel.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    const profile = await UserProfile.create({ ...value, user: userSessionId });
+    const profile = await UserProfile.create({ ...value, user: userId });
 
     user.userProfile = profile._id;
 
