@@ -1,5 +1,6 @@
 import { model, Schema, Types } from "mongoose";
 import { toJSON } from "@reis/mongoose-to-json";
+import { type } from "os";
 
 
 
@@ -13,8 +14,9 @@ const userProfileSchema = new Schema({
   about: { type: String },
   dateOfBirth: { type: Date },
   title: { type: String, enum: ["Mr", "Mrs", "Miss", "Dr", "Esq"] },
-  contact: { type: String },
+  phoneNumber: { type: String },
   resume: { type: String },
+  address: { type: String },
   languages: [{ type: String }],
   githubLink: { type: String },
   linkedinLink: { type: String },

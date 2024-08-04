@@ -18,7 +18,13 @@ export const addProfile = async (req, res, next) => {
 
     const userId = req.session?.user?.id || req?.user.id;
 
-
+    // Extract the full name from the request body
+    const { fullName } = req.body
+    //  Check if userProfile already exists
+    const existingUserProfile = await UserModel.findOne({ fullName: fullName }, { userId: userId });
+    if (existingUserProfile) {
+      return res.status(409).json('The profile already exists for this user')
+    }
     const user = await UserModel.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");

@@ -3,12 +3,11 @@ import { toJSON } from "@reis/mongoose-to-json";
 
 const userSchema = new Schema({
   firstName: { type: String },
-  lastName: { type: String },
+  surnameName: { type: String },
   otherNames: { type: String },
   email: { type: String, unique: true, required: true },
   password: { type: String },
   userName: { type: String },
-  termsAndConditions: { type: Boolean },
   education: [{ type: Types.ObjectId, ref: 'Education' }],
   skills: [{ type: Types.ObjectId, ref: 'Skill' }],
   achievements: [{ type: Types.ObjectId, ref: 'Achievement' }],
